@@ -23,6 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
+# Variáveis de ambiente
+.env
+
 
 node_modules
 /server/.env

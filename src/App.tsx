@@ -10,6 +10,8 @@ import AgenteInterno from "./pages/AgenteInterno";
 import OrganizacaoFinanceira from "./pages/OrganizacaoFinanceira";
 import DocumentosAutomaticos from "./pages/DocumentosAutomaticos";
 import NotFound from "./pages/NotFound";
+import Login from "./pages/Login";
+import Cadastro from "./pages/Cadastro";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +29,8 @@ const App = () => (
             <Route path="/agente-interno" element={<AgenteInterno />} />
             <Route path="/organizacao-financeira" element={<OrganizacaoFinanceira />} />
             <Route path="/documentos-automaticos" element={<DocumentosAutomaticos />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/cadastro" element={<Cadastro />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

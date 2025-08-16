@@ -2,6 +2,7 @@ import { MessageSquare, Bot, Settings, BarChart3, Users, Clock } from "lucide-re
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatsCard } from "@/components/dashboard/StatsCard";
+import { useEffect, useState } from "react";
 
 const chatbotStats = [
   {

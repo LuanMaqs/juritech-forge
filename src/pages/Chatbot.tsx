@@ -1,7 +1,8 @@
-import { MessageSquare, Bot, Settings, BarChart3, Users, Clock } from "lucide-react";
+import { MessageSquare, Bot, Settings, BarChart3, Users, Clock, Dice1 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { StatsCard } from "@/components/dashboard/StatsCard";
+import { useEffect, useState } from "react";
 
 const chatbotStats = [
   {
@@ -39,10 +40,54 @@ const chatbotStats = [
 ];
 
 export default function Chatbot() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { sender: "bot", text: "Olá 👋! Eu sou seu assistente virtual com IA, como posso ajudar?" }
+  ]);
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    const userMessage = { sender: "user", text: input };
+    setMessages([...messages, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:3001/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input })
+      });
+
+      const data = await response.json();
+      const botMessage = { sender: "bot", text: data.reply };
+
+      setMessages((prev) => [...prev, botMessage]);
+    } catch (error) {
+      console.error("Erro OpenAI:", error);
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "⚠️ Erro ao conectar com a IA." }
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isOpen])
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="container mx-auto max-w-7xl">
-        {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
@@ -95,7 +140,63 @@ export default function Chatbot() {
                   <p className="text-muted-foreground text-sm">
                     Interface interativa será implementada aqui
                   </p>
-                  <Button>Testar Chatbot</Button>
+                  <div className={`${isOpen ? "blur-sm" : ""} transition-all`}>
+                    <Button onClick={() => setIsOpen(true)}>Testar Chatbot</Button>
+                  </div>
+                  {isOpen && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-55">
+                      <div className="bg-white rounded-2xl shadow-lg p-6 w-[80%] h-[80%] relative flex flex-col">
+                        <div className="flex justify-between items-center border-b pb-3 mb-4">
+                          <h2 className="text-2xl font-semibold">Chatbot em Teste</h2>
+                          <button
+                            onClick={() => setIsOpen(false)}
+                            className="text-blue-900 hover:text-blue-700 text-lg font-bold"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <div className="flex-1 border rounded-lg p-4 overflow-y-auto">
+                          {/* <p className="text-gray-500">
+                            Aqui ficará a interface do chatbot em tamanho grande...
+                          </p> */}
+                          <div className="flex-1 overflow-y-auto border rounded-lg p-4 space-y-3">
+                            {messages.map((msg, i) => (
+                              <div
+                                key={i}
+                                className={`p-3 rounded-lg max-w-[70%] ${
+                                msg.sender === "user"
+                                ? "ml-auto bg-blue-500 text-white"
+                                : "mr-auto bg-gray-200 text-gray-900"
+                                }`}
+                              >
+                                {msg.text}
+                              </div>
+                            ))}
+                            {loading && (
+                              <p className="text-gray-400 italic">Digitando...</p>
+                            )}
+                          </div>
+                          <div className="mt-4 flex">
+                            <input
+                              value={input}
+                              onChange={(e) => setInput(e.target.value)}
+                              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                              className="flex-1 border rounded-lg px-4 py-2"
+                              placeholder="Digite sua mensagem..."
+                            />
+                            <button
+                              onClick={sendMessage}
+                              className="ml-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                            >
+                              Enviar
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex justify-end mt-4">
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </CardContent>

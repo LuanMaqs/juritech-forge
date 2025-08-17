@@ -30,6 +30,9 @@ const Login = () => {
               </div>
 
               <Button type="submit" className="w-full">Entrar</Button>
+              <Button asChild variant="secondary" className="w-full">
+                <Link to="/dashboard">Entrar como admin</Link>
+              </Button>
 
               <div className="flex items-center justify-end">
                 <a href="#" className="text-sm text-primary hover:underline">Esqueceu a senha?</a>

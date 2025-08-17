@@ -45,8 +45,7 @@ async function registerUser(req, res) {
     if (existingUser) {
       return res.status(400).json({ error: 'Usuário já existe' });
     }
-
-    // Alterado apenas para usar formattedOAB
+    
     const { data, error: insertError } = await supabase.from('users')
       .insert([{ name, email, password: hashPassword, cpf: encryptedCPF, oab: formattedOAB}])
       .select()

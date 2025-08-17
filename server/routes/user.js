@@ -6,11 +6,24 @@ const { registerUser, loginUser, getCpf } = require('../controllers/userControll
 
 const router = express.Router();
 
-// Rotas do CRUD de usuários
-router.post('/register', registerUser); // Cadastro
-router.post('/login', loginUser);       // Login
-router.get('/:id', authenticateToken, getCpf); // Obter CPF de um usuário autenticado
-router.get('/', async (req, res) => {   // Listar todos usuários (debug)
+router.post('/register', registerUser); 
+router.post('/login', loginUser);
+
+router.get('/me', authenticateToken, async (req, res) => {
+    try{
+        const {data, error} = await supabase
+        .from('users')
+        .select('*')
+        .eq(req.user.id)
+        .single()
+
+        if(error || !data) return res.status(404).json({error: 'Usuario nao encontrado'});
+    }catch(err){
+        res.status(500).json({error: err.message})
+    }
+})
+ 
+router.get('/', async (req, res) => {   
     try {
         const { data, error } = await supabase.from('users').select('*');
         if (error) throw error;

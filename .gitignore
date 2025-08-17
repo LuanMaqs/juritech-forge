@@ -31,3 +31,5 @@ node_modules
 /server/.env
 ./server/node_modules
 .env
+
+juritech-forge.git

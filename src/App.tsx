@@ -12,6 +12,8 @@ import DocumentosAutomaticos from "./pages/DocumentosAutomaticos";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import Cadastro from "./pages/Cadastro";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,8 @@ function AppLayout() {
         <Route path="/documentos-automaticos" element={<DocumentosAutomaticos />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

@@ -20,15 +20,11 @@ app.use(cors({
 
 app.use(express.json());
 
-// Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-// Rotas de usuários
 app.use('/api/users', usersRouter);
-
-// Start do servidor
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

@@ -3,10 +3,35 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
+import api from "../api/axios";
+import axios from "axios";
 
 const Login = () => {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError('');
+
+    try {
+      const response = await api.post('/users/login', { email, password });
+      const { token } = response.data;
+
+      localStorage.setItem('token', token);
+
+      window.location.href = '/dashboard';
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.error || 'Erro ao fazer login');
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Erro desconhecido');
+      }
+    }
   };
 
   return (
@@ -21,13 +46,29 @@ const Login = () => {
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="space-y-1">
                 <Label htmlFor="email">E-mail</Label>
-                <Input id="email" type="email" placeholder="seuemail@exemplo.com" required />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="seuemail@exemplo.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
 
               <div className="space-y-1">
                 <Label htmlFor="password">Senha</Label>
-                <Input id="password" type="password" placeholder="********" required />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="********"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
+
+              {error && <p className="text-red-500 text-sm">{error}</p>}
 
               <Button type="submit" className="w-full">Entrar</Button>
               <Button asChild variant="secondary" className="w-full">

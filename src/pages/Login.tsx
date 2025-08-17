@@ -76,7 +76,9 @@ const Login = () => {
               </Button>
 
               <div className="flex items-center justify-end">
-                <a href="#" className="text-sm text-primary hover:underline">Esqueceu a senha?</a>
+                <Link to="/forgot-password" className="text-sm text-primary hover:underline">
+                    Esqueceu a senha?
+                </Link>
               </div>
             </form>
           </CardContent>

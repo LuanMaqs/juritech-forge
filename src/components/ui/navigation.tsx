@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
@@ -9,7 +9,8 @@ import {
   FileText, 
   PiggyBank,
   Menu,
-  X 
+  CircleUserRound,
+  X
 } from "lucide-react";
 
 const navigationItems = [
@@ -18,21 +19,21 @@ const navigationItems = [
     href: "/dashboard",
     icon: Scale,
   },
+  // {
+  //   name: "Chatbot",
+  //   href: "/chatbot",
+  //   icon: MessageSquare,
+  // },
   {
-    name: "Chatbot",
-    href: "/chatbot",
+    name: "Formulario",
+    href: "/formulario",
     icon: MessageSquare,
   },
-  {
-    name: "Agente Interno",
-    href: "/agente-interno",
-    icon: Users,
-  },
-  {
-    name: "Organização Financeira",
-    href: "/organizacao-financeira",
-    icon: PiggyBank,
-  },
+  // {
+  //   name: "Organização Financeira",
+  //   href: "/organizacao-financeira",
+  //   icon: PiggyBank,
+  // },
   {
     name: "Documentos Automáticos",
     href: "/documentos-automaticos",
@@ -40,9 +41,41 @@ const navigationItems = [
   },
 ];
 
+const iconUser = [{icon: CircleUserRound}]
+
+const navigationUser = [
+  {
+    name: "Configurações",
+    href: "",
+  },
+  {
+    name: "Perfil",
+    href: "",
+  },
+  {
+    name: "Sair",
+    href: "",
+  }
+]
+
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isDropdownUserOpen, setisDropdownUserOpen] = useState(false);
   const location = useLocation();
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setisDropdownUserOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
@@ -65,6 +98,54 @@ export function Navigation() {
               <Icon className="h-5 w-5" />
               <span className="font-medium">{item.name}</span>
             </Link>
+          );
+        })}
+      </nav>
+
+      <nav id="1" className="relative">
+        {iconUser.map((item, index) => {
+          const IconUser = item.icon;
+          const dropdownRef = useRef(null);
+
+          useEffect(() => {
+            function handleClickOutside(event) {
+              if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target)
+              ) {
+                setisDropdownUserOpen(false);
+              }
+            }
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+              document.removeEventListener("mousedown", handleClickOutside);
+            };
+          }, []);
+
+          return (
+            <div key={index} className="relative" ref={dropdownRef}>
+              <IconUser
+                className="h-10 w-10 cursor-pointer text-muted-foreground hover:text-primary transition"
+                onClick={() => setisDropdownUserOpen(!isDropdownUserOpen)}
+              />
+
+              {isDropdownUserOpen && (
+                <div className="absolute right-0 mt-2 w-48 rounded-xl shadow-lg bg-card border p-2 z-50">
+                  {navigationUser.map((item, idx) => (
+                    <button
+                      key={idx}
+                      className="w-full text-left px-4 py-2 rounded-lg text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition"
+                      onClick={() => {
+                        // Aqui você pode colocar a lógica de cada opção
+                        console.log(`${item.name} clicado`);
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           );
         })}
       </nav>
@@ -95,7 +176,7 @@ export function Navigation() {
               </Button>
             </div>
             
-            <nav className="space-y-4">
+            <nav className="space-y-4 "> {/* Aqui */}
               {navigationItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = location.pathname === item.href;

@@ -5,7 +5,7 @@ const usersRouter = require('./routes/user.js');
 
 const app = express();
 const port = process.env.PORT || 3001;
-const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173"].filter(Boolean);
+const allowedOrigins = [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:8081"].filter(Boolean);
 
 app.use(cors({
   origin: function(origin, callback) {

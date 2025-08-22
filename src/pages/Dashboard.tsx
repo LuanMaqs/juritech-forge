@@ -12,19 +12,19 @@ import { ModuleCard } from "@/components/dashboard/ModuleCard";
 import { StatsCard } from "@/components/dashboard/StatsCard";
 
 const modules = [
-  {
-    title: "Chatbot Jurídico",
-    description: "Assistente virtual inteligente para consultas legais e atendimento ao cliente.",
-    icon: MessageSquare,
-    href: "/chatbot",
-    gradient: "gradient-primary",
-    features: [
-      "Respostas automáticas 24/7",
-      "Base de conhecimento jurídico",
-      "Integração com WhatsApp",
-      "Relatórios de interações"
-    ]
-  },
+  // {
+  //   title: "Chatbot Jurídico",
+  //   description: "Assistente virtual inteligente para consultas legais e atendimento ao cliente.",
+  //   icon: MessageSquare,
+  //   href: "/chatbot",
+  //   gradient: "gradient-primary",
+  //   features: [
+  //     "Respostas automáticas 24/7",
+  //     "Base de conhecimento jurídico",
+  //     "Integração com WhatsApp",
+  //     "Relatórios de interações"
+  //   ]
+  // },
   {
     title: "Agente Interno",
     description: "Gestão inteligente de equipes e processos internos do escritório.",
@@ -38,19 +38,19 @@ const modules = [
       "Dashboard analítico"
     ]
   },
-  {
-    title: "Organização Financeira",
-    description: "Controle completo das finanças do escritório com automação inteligente.",
-    icon: PiggyBank,
-    href: "/organizacao-financeira",
-    gradient: "gradient-primary",
-    features: [
-      "Fluxo de caixa automático",
-      "Controle de honorários",
-      "Relatórios financeiros",
-      "Gestão de recebíveis"
-    ]
-  },
+  // {
+  //   title: "Organização Financeira",
+  //   description: "Controle completo das finanças do escritório com automação inteligente.",
+  //   icon: PiggyBank,
+  //   href: "/organizacao-financeira",
+  //   gradient: "gradient-primary",
+  //   features: [
+  //     "Fluxo de caixa automático",
+  //     "Controle de honorários",
+  //     "Relatórios financeiros",
+  //     "Gestão de recebíveis"
+  //   ]
+  // },
   {
     title: "Documentos Automáticos",
     description: "Geração automatizada de contratos e documentos jurídicos.",
@@ -111,7 +111,7 @@ export default function Dashboard() {
           <div className="text-center space-y-6">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
               Bem-vindo ao{" "}
-              <span className="gradient-primary bg-clip-text text-transparent">
+              <span className="gradient-primary bg-clip-text text-white">
                 JuriTech
               </span>
             </h1>

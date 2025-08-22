@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Header } from "@/components/ui/header";
 import Dashboard from "./pages/Dashboard";
 import Chatbot from "./pages/Chatbot";
+import Formulario from "./pages/Formulario";
 import AgenteInterno from "./pages/AgenteInterno";
 import OrganizacaoFinanceira from "./pages/OrganizacaoFinanceira";
 import DocumentosAutomaticos from "./pages/DocumentosAutomaticos";
@@ -19,13 +20,15 @@ const queryClient = new QueryClient();
 
 function AppLayout() {
   const location = useLocation();
-  const hideHeader = location.pathname === "/login" || location.pathname === "/cadastro";
+  // const hideHeader = location.pathname === "/login" || location.pathname === "/cadastro";
+  const hideHeader = ["/", "/login", "/cadastro"].includes(location.pathname)
   return (
     <div className="min-h-screen bg-background">
       {!hideHeader && <Header />}
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/formulario" element={<Formulario />} />
         <Route path="/chatbot" element={<Chatbot />} />
         <Route path="/agente-interno" element={<AgenteInterno />} />
         <Route path="/organizacao-financeira" element={<OrganizacaoFinanceira />} />

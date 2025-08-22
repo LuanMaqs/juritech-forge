@@ -150,7 +150,7 @@ const Cadastro = () => {
           <CardFooter className="flex-col space-y-3">
             <div className="text-sm text-muted-foreground">Já possui uma conta?</div>
             <Button asChild variant="outline" className="w-full">
-              <Link to="/login">Ir para login</Link>
+              <Link to="/">Ir para login</Link>
             </Button>
           </CardFooter>
         </Card>

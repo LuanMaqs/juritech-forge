@@ -185,4 +185,65 @@ async function logoutUser(req, res) {
     }
 }
 
-module.exports = { registerUser, loginUser, getCpf, getUserById, forgotPassword, resetPassword, logoutUser };
+function anonymizeValue(value){
+    return `anom-${crypto.createHash('sha256').update(value).digest('hex').slice(0, 16)}`;
+}
+
+async function deleteUser(req, res) {
+    const  userId = req.user.id;
+    const {password, confirm} = req.body;
+    if(confirm !== 'DELETAR'){
+       return res.status(400).json({message: "Confirmação inválida, por favor digite DELETAR"});
+    }
+
+    try{
+        const {data: user, error: userError } = await supabase
+        .from('user')
+        .select('*')
+        .eq(id, userId)
+        .single
+
+        if(userError || !user) return res.status(400).json({message: "Erro ao encontrar usuário"});
+
+        const validPassword = await bcrypt.compare(password, user.password);
+        if (!validPassword) return res.status(403).json({ error: 'Senha incorreta' });
+
+        await supabase.from('sessions').delete().eq('user_id', userId);
+        await supabase.from('refresh_tokens').delete().eq('user_id', userId);
+
+        const relatedTables = ['password_resets', 'api_keys', 'messages', 'notifications', 'profile', 'devices'];
+        for (const table of relatedTables) {
+            await supabase.from(table).delete().eq('user_id', userId);
+        }
+
+
+        const { data: invoices } = await supabase.from('invoices').select('*').eq('user_id', userId);
+        for (const invoice of invoices) {
+            await supabase.from('invoices').update({
+                user_id: null,
+                customer_name: anonymizeValue(userId),
+                customer_email: null,
+                customer_cpf: null,
+            }).eq('id', invoice.id);
+        }
+
+        await supabase.from('audit_logs').insert({
+            event: 'USER_ERASURE',
+            actor_user_id: anonymizeValue(userId),
+            details: JSON.stringify({
+                reason: 'Usuário solicitou exclusão',
+                legal_basis: 'LGPD Art. 18 VI - eliminação de dados pessoais',
+            }),
+            created_at: new Date(),
+        });
+
+        await supabase.from('users').delete().eq('id', userId);
+        res.status(200).json({ message: 'Conta e dados pessoais removidos com sucesso' });
+
+    }catch (err) {
+        console.error('Erro ao deletar conta:', err);
+        res.status(500).json({ error: 'Erro interno ao deletar conta' });
+    }
+}
+
+module.exports = { registerUser, loginUser, getCpf, getUserById, forgotPassword, resetPassword, logoutUser, deleteUser };

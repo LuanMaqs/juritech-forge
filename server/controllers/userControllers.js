@@ -9,7 +9,7 @@ async function registerUser(req, res) {
     const { name, password, email, cpf, oab } = req.body;
 
     try {
-        if (!name || !password || !email || !cpf) {
+        if (!name || !password || !email || !cpf || !oab) {
             return res.status(400).json({ error: 'Campos obrigatórios faltando' });
         }
 
@@ -174,4 +174,15 @@ async function resetPassword(req, res) {
     }
 }
 
-module.exports = { registerUser, loginUser, getCpf, getUserById, forgotPassword, resetPassword };
+async function logoutUser(req, res) {
+    try{
+        res.clearCookie("token");
+        return res.status(200).json({message: "Logout feito com sucesso"});
+        console.log("O usuario fez logout");
+    }catch (err){
+        res.status(500).json({message: "Erro ao sair"});
+        console.log("erro ao sair");
+    }
+}
+
+module.exports = { registerUser, loginUser, getCpf, getUserById, forgotPassword, resetPassword, logoutUser };

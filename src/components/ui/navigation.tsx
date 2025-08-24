@@ -9,6 +9,7 @@ import {
   FileText, 
   PiggyBank,
   Menu,
+   ClipboardList,
   CircleUserRound,
   X
 } from "lucide-react";
@@ -19,21 +20,21 @@ const navigationItems = [
     href: "/dashboard",
     icon: Scale,
   },
-  // {
-  //   name: "Chatbot",
-  //   href: "/chatbot",
-  //   icon: MessageSquare,
-  // },
+   {
+     name: "Slack",
+     href: "/agente-interno",
+     icon: MessageSquare,
+   },
   {
     name: "Formulario",
     href: "/formulario",
-    icon: MessageSquare,
+    icon:  ClipboardList,
   },
-  // {
-  //   name: "Organização Financeira",
-  //   href: "/organizacao-financeira",
-  //   icon: PiggyBank,
-  // },
+  {
+     name: "Organização Financeira",
+     href: "/organizacao-financeira",
+     icon: PiggyBank,
+  },
   {
     name: "Documentos Automáticos",
     href: "/documentos-automaticos",
@@ -136,7 +137,15 @@ export function Navigation() {
                       key={idx}
                       className="w-full text-left px-4 py-2 rounded-lg text-sm text-muted-foreground hover:bg-accent hover:text-accent-foreground transition"
                       onClick={() => {
-                        // Aqui você pode colocar a lógica de cada opção
+                        if(item.name === 'Sair'){
+                          localStorage.clear();
+                          window.location.href = "/login"
+                        }
+                        else if(item.name === "Configurações"){
+                          window.location.href = "/configuracao"
+                        }else if(item.name === "Perfil") {
+                          window.location.href = "/Perfil"
+                        }
                         console.log(`${item.name} clicado`);
                       }}
                     >

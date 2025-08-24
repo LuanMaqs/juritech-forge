@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 export default function Formulario() {
     const [formData, setFormData] = useState({});
     const [tipoCliente, setTipoCliente] = useState("fisica");

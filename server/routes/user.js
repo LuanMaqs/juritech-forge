@@ -8,7 +8,8 @@ const {
     getCpf, 
     getUserById, 
     forgotPassword, 
-    resetPassword 
+    resetPassword, 
+    logoutUser
 } = require('../controllers/userControllers.js');
 
 const router = express.Router();
@@ -16,11 +17,10 @@ const router = express.Router();
 
 router.post('/register', registerUser); 
 router.post('/login', loginUser);
-
+router.post('/logoutUser', logoutUser);
 
 router.post('/forgot-password', forgotPassword);  
 router.post('/reset-password', resetPassword);    
-
 
 router.get('/:id', authenticateToken, getCpf);
 router.get('/me', authenticateToken, getUserById);
